@@ -5,9 +5,8 @@ FROM jlesage/baseimage-gui:debian-10
 ENV APP_NAME="StardewValley"
 
 # 替换apt源为archive.debian.org，解决buster官方源404问题
-RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
-    # 禁用校验，archive源没有Release文件，避免报错
+RUN sed -i 's|http://deb.debian.org/debian|http://mirrors.cloud.tencent.com/debian-archive/debian|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org/debian-security|http://mirrors.cloud.tencent.com/debian-archive/debian-security|g' /etc/apt/sources.list && \
     echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until && \
     apt-get update
 
