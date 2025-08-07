@@ -1,11 +1,18 @@
 # Pull base image.
-FROM jlesage/baseimage-gui:debian-11
+FROM jlesage/baseimage-gui:debian-10
 
 # Set the name of the application.
 ENV APP_NAME="StardewValley"
 
-RUN apt-get update
+# 替换apt源为archive.debian.org，解决buster官方源404问题
+RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org/debian-security|http://archive.debian.org/debian-security|g' /etc/apt/sources.list && \
+    # 禁用校验，archive源没有Release文件，避免报错
+    echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until && \
+    apt-get update
+
 RUN apt-get install -y wget unzip tar strace mono-complete xterm gettext-base jq netcat procps 
+
 #RUN APP_ICON_URL=https://stardewcommunitywiki.com/mediawiki/images/4/48/Fiddlehead_Fern.png && \
 #    install_app_icon.sh "$APP_ICON_URL"
 
